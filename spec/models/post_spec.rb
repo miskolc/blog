@@ -37,6 +37,37 @@ describe Post do
     it { should_not be_valid }
   end
 
-  describe
+  describe "Length of fields" do
+    describe "title minimum length should be higher than 4" do
+      before { @post.title = "a" * 4 }
+      it { should_not be_valid }
+    end  
+
+    describe "title maximum length should be less than 51" do
+      before { @post.title = "a" * 51 }
+      it { should_not be_valid }
+    end 
+
+    describe "name maximum length should be less than 51" do
+      before { @post.name = "a" * 51 }
+      it { should_not be_valid }
+    end  
+  end  
+
+
+  describe "Posts descending order of creation date" do
+    let!(:older_post) do
+        FactoryGirl.create(:post, created_at: 1.day.ago)
+    end   
+    let!(:newer_post) do 
+        FactoryGirl.create(:post, created_at: 1.hour.ago)
+    end
+    
+    it "should have the 2 posts in desc order" do
+        Post.all.should == [newer_post, older_post]
+
+    end    
+  end
+  
 
 end
